@@ -1,0 +1,51 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import TemplateView
+
+
+@login_required(login_url=reverse_lazy("user:login"), redirect_field_name=None)
+def login_user(request):
+    if request.user.is_superuser:
+        return redirect(reverse_lazy("admin:index"))
+    return redirect(reverse_lazy("users:dashboard"))
+
+
+@login_required(login_url=reverse_lazy("users:login"), redirect_field_name=None)
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy("users:login"))
+
+
+class LoginFormView(TemplateView):
+    template_name = "users/login.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(reverse_lazy("user:login_session"))
+        return render(request, self.template_name, {})
+
+    def post(self, request):
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.is_staff:
+            login(request, user)
+        else:
+            messages.error(request, "¡Nombre de usuario o contraseña incorrectos!")
+        return redirect(reverse_lazy("user:login_session"))
+
+
+class Dashboard(LoginRequiredMixin, View):
+    template_name = "users/dashboard.html"
+
+    def get(self, request):
+        return render(
+            request,
+            self.template_name,
+            {},
+        )
