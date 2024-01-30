@@ -1,4 +1,4 @@
-from apps.mina.repository.measurement_repository import IMeasurementRepository
+from apps.mine.repository.measurement_repository import IMeasurementRepository
 
 
 class MemoryMeasurementRepository(IMeasurementRepository):

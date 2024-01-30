@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from apps.mina.repository.measurement_repository import IMeasurementRepository
+from apps.mine.repository.measurement_repository import IMeasurementRepository
 
 
 class ApiRestMeasurementRepository(IMeasurementRepository):

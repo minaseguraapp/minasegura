@@ -61,19 +61,19 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
-                                        <a href="{% url 'mina:measurement' 'gas' %}" class="nav-link">
+                                        <a href="{% url 'mine:measurement' 'gas' %}" class="nav-link">
                                             <i class="fas fa-ruler-horizontal nav-icon"></i>
                                             <p>Medición</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mina:alerts' 'gas' %}" class="nav-link">
+                                        <a href="{% url 'mine:alerts' 'gas' %}" class="nav-link">
                                             <i class="fas fa-bell nav-icon"></i>
                                             <p>Alertas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mina:settings' 'gas' %}" class="nav-link">
+                                        <a href="{% url 'mine:settings' 'gas' %}" class="nav-link">
                                             <i class="fas fa-cog nav-icon"></i>
                                             <p>Configuración</p>
                                         </a>
@@ -90,19 +90,19 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
-                                        <a href="{% url 'mina:measurement' 'coal' %}" class="nav-link">
+                                        <a href="{% url 'mine:measurement' 'coal' %}" class="nav-link">
                                             <i class="fas fa-ruler-horizontal nav-icon"></i>
                                             <p>Medición</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mina:alerts' 'coal' %}" class="nav-link">
+                                        <a href="{% url 'mine:alerts' 'coal' %}" class="nav-link">
                                             <i class="fas fa-bell nav-icon"></i>
                                             <p>Alertas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mina:settings' 'coal' %}" class="nav-link">
+                                        <a href="{% url 'mine:settings' 'coal' %}" class="nav-link">
                                             <i class="fas fa-cog nav-icon"></i>
                                             <p>Configuración</p>
                                         </a>
@@ -117,6 +117,14 @@
                                         <i class="fas fa-angle-left right"></i>
                                     </p>
                                 </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+                                    <li class="nav-item">
+                                        <a href="{% url 'inventory:maintenance_list' %}" class="nav-link">
+                                            <i class="fas fa-toolbox nav-icon"></i>
+                                            <p>Mantenimientos</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </nav>

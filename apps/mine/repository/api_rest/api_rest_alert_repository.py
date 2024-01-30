@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from apps.mina.repository.alert_repository import IAlertRepository
+from apps.mine.repository.alert_repository import IAlertRepository
 
 
 class ApiRestAlertRepository(IAlertRepository):

@@ -17,7 +17,7 @@ class Measurement(LoginRequiredMixin, View):
 
     @staticmethod
     def get_template(type_name: str):
-        return f"mina/{type_name}/measurement.html"
+        return f"mine/{type_name}/measurement.html"
 
 
 class Alerts(LoginRequiredMixin, View):
@@ -34,7 +34,7 @@ class Alerts(LoginRequiredMixin, View):
 
     @staticmethod
     def get_template(type_name: str):
-        return f"mina/{type_name}/alerts.html"
+        return f"mine/{type_name}/alerts.html"
 
 
 class Settings(LoginRequiredMixin, View):
@@ -51,4 +51,4 @@ class Settings(LoginRequiredMixin, View):
 
     @staticmethod
     def get_template(type_name: str):
-        return f"mina/{type_name}/settings.html"
+        return f"mine/{type_name}/settings.html"
