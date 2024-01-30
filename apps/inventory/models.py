@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.db import models
 
 from apps.mine.models import Mine
@@ -6,7 +7,7 @@ from apps.mine.models import Mine
 class Priority(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre')
     description = models.TextField(verbose_name='Descripción', null=True, blank=True)
-    color = models.CharField(max_length=10, verbose_name='Color')
+    color = ColorField(default='#FF0000', verbose_name='Color')
     is_active = models.BooleanField(default=True, verbose_name='¿Activo?')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualización')
