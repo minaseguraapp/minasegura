@@ -5,7 +5,8 @@ from apps.mine.repository.alert_repository import IAlertRepository
 
 class ApiRestAlertRepository(IAlertRepository):
     _api_gateway = settings.API_GATEWAY_URL
-    _api_token = settings.API_GATEWAY_TOKEN
+
+    # _api_token = settings.API_GATEWAY_TOKEN
 
     def __init__(self):
         self._alerts = []

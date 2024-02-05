@@ -25,7 +25,7 @@ class ZoneType(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.name + ' - ' + self.code
 
     class Meta:
         verbose_name = 'Tipo de zona'
@@ -42,7 +42,7 @@ class Zone(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.name + ' - ' + self.code
 
     class Meta:
         verbose_name = 'Zona'

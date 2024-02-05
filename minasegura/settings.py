@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.mine.context_processors.get_user_mine'
             ],
         },
     },
@@ -148,5 +149,5 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'alert-danger',
 }
 
-API_GATEWAY_URL = 'http://localhost:8000'
+API_GATEWAY_URL = 'https://w8b24xhk1i.execute-api.us-east-1.amazonaws.com'
 API_GATEWAY_TOKEN = '1234567890'

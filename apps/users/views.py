@@ -7,12 +7,19 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
 
+from apps.mine.models import Mine
+
 
 @login_required(login_url=reverse_lazy("user:login"), redirect_field_name=None)
 def login_user(request):
     if request.user.is_superuser:
         return redirect(reverse_lazy("admin:index"))
-    return redirect(reverse_lazy("users:dashboard"))
+    
+    first_mine = Mine.objects.filter(manager=request.user).first()
+    if not first_mine:
+        messages.error(request, "¡No tienes minas asignadas!")
+        return redirect(reverse_lazy("user:logout"))
+    return redirect(reverse_lazy("users:dashboard", kwargs={"mine": first_mine.id}))
 
 
 @login_required(login_url=reverse_lazy("users:login"), redirect_field_name=None)
@@ -43,7 +50,7 @@ class LoginFormView(TemplateView):
 class Dashboard(LoginRequiredMixin, View):
     template_name = "users/dashboard.html"
 
-    def get(self, request):
+    def get(self, request, mine: int, *args, **kwargs):
         return render(
             request,
             self.template_name,

@@ -5,5 +5,5 @@ from .views import MaintenanceListView
 app_name = "inventory"
 
 urlpatterns = [
-    path("maintenance/list", MaintenanceListView.as_view(), name="maintenance_list"),
+    path("maintenance/<int:mine>/list", MaintenanceListView.as_view(), name="maintenance_list"),
 ]

@@ -44,7 +44,7 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
                             <li class="nav-item">
-                                <a href="{% url 'users:dashboard' %}" class="nav-link">
+                                <a href="{% url 'users:dashboard' user_mine.id %}" class="nav-link">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
                                         Dashboard
@@ -52,7 +52,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'users:dashboard' %}" class="nav-link">
+                                <a href="{% url 'users:dashboard' user_mine.id %}" class="nav-link">
                                     <i class="nav-icon fas fa-fire"></i>
                                     <p>
                                         Gas Metano
@@ -61,19 +61,19 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
-                                        <a href="{% url 'mine:measurement' 'gas' %}" class="nav-link">
+                                        <a href="{% url 'mine:measurement' user_mine.id 'gas' %}" class="nav-link">
                                             <i class="fas fa-ruler-horizontal nav-icon"></i>
                                             <p>Medición</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mine:alerts' 'gas' %}" class="nav-link">
+                                        <a href="{% url 'mine:alerts' user_mine.id 'gas' %}" class="nav-link">
                                             <i class="fas fa-bell nav-icon"></i>
                                             <p>Alertas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mine:settings' 'gas' %}" class="nav-link">
+                                        <a href="{% url 'mine:settings' user_mine.id 'gas' %}" class="nav-link">
                                             <i class="fas fa-cog nav-icon"></i>
                                             <p>Configuración</p>
                                         </a>
@@ -81,7 +81,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'users:dashboard' %}" class="nav-link">
+                                <a href="{% url 'users:dashboard' user_mine.id %}" class="nav-link">
                                     <i class="nav-icon fas fa-industry"></i>
                                     <p>
                                         Polvo de carbón
@@ -90,19 +90,19 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
-                                        <a href="{% url 'mine:measurement' 'coal' %}" class="nav-link">
+                                        <a href="{% url 'mine:measurement' user_mine.id 'coal' %}" class="nav-link">
                                             <i class="fas fa-ruler-horizontal nav-icon"></i>
                                             <p>Medición</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mine:alerts' 'coal' %}" class="nav-link">
+                                        <a href="{% url 'mine:alerts' user_mine.id 'coal' %}" class="nav-link">
                                             <i class="fas fa-bell nav-icon"></i>
                                             <p>Alertas</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{% url 'mine:settings' 'coal' %}" class="nav-link">
+                                        <a href="{% url 'mine:settings' user_mine.id 'coal' %}" class="nav-link">
                                             <i class="fas fa-cog nav-icon"></i>
                                             <p>Configuración</p>
                                         </a>
@@ -110,7 +110,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="{% url 'users:dashboard' %}" class="nav-link">
+                                <a href="{% url 'users:dashboard' user_mine.id %}" class="nav-link">
                                     <i class="nav-icon fas fa-warehouse"></i>
                                     <p>
                                         Inventario
@@ -119,7 +119,7 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
-                                        <a href="{% url 'inventory:maintenance_list' %}" class="nav-link">
+                                        <a href="{% url 'inventory:maintenance_list' user_mine.id %}" class="nav-link">
                                             <i class="fas fa-toolbox nav-icon"></i>
                                             <p>Mantenimientos</p>
                                         </a>
