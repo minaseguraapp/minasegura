@@ -15,6 +15,17 @@
     <div class="wrapper">
         {% include 'aside_menu.html' %}
         <div class="content-wrapper" style="min-height: 1604.44px;">
+            {% if messages %}
+                <div class="pt-4 px-3">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %} {{ message.tags }} {% endif %} alert-dismissible fade show"
+                             role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {% block extra_content %}
             {% endblock extra_content %}
         </div>
