@@ -1,16 +1,119 @@
 {% extends 'dashboard_base.html' %}
-{% block title %}Configuración | {{ type_name }}{% endblock %}
+{% load static %}
+{% block title %}Configuración | {{ type_name|title }}{% endblock %}
 
 {% block extra_content %}
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Configuración - {{ type_name }}</h1>
+                    <h1>Configuración de alertas - {{ type_name|title }}</h1>
                 </div>
             </div>
         </div>
     </section>
     <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card card-primary">
+                        <div class="card-header d-flex justify-content-center">
+                            <h3 class="card-title">Limites de alerta</h3>
+                        </div>
+                        <form class="form-horizontal">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group row d-flex">
+                                    <div class="col-sm-8 text-center align-self-center">
+                                        <h4>Sitio</h4>
+                                    </div>
+                                    <div class="col-sm-4 text-center align-self-center">
+                                        <h4>
+                                            <small>
+                                                Porcentaje (%) Máximo permisible
+                                                de metano
+                                            </small>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="maxDustLevel"
+                                           class="col-sm-8 col-form-label">En labores o frentes de explotación</label>
+                                    <div class="col-sm-4">
+                                        <input type="number" step="0.01" class="form-control"
+                                               name="max_dust_level"
+                                               value="{{ settings.thresholdInfo.maxDustLevel }}"
+                                               placeholder="0.0"
+                                               id="maxDustLevel">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="maxParticleSize"
+                                           class="col-sm-8 col-form-label">En los retornos principales de aire</label>
+                                    <div class="col-sm-4">
+                                        <input type="number" step="0.01" class="form-control"
+                                               name="max_particle_size"
+                                               value="{{ settings.thresholdInfo.maxParticleSize }}"
+                                               placeholder="0.0"
+                                               id="maxParticleSize">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary float-right">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card card-primary">
+                        <div class="card-header d-flex justify-content-center">
+                            <h3 class="card-title">Configuración Notificación</h3>
+                        </div>
+                        <form data-bitwarden-watching="1">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Correo</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        </div>
+                                        <input type="email" class="form-control" id="exampleInputEmail1"
+                                               placeholder="Ingrese el correo">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefono</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control"
+                                               data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;"
+                                               data-mask="" inputmode="text">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock extra_content %}
+{% block extra_js %}
+    <script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('[data-mask]').inputmask();
+        });
+    </script>
+{% endblock %}

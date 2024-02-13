@@ -149,5 +149,5 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'alert-danger',
 }
 
-API_GATEWAY_URL = 'https://w8b24xhk1i.execute-api.us-east-1.amazonaws.com'
+API_GATEWAY_URL = 'https://mp3ptxs9q4.execute-api.us-east-1.amazonaws.com'
 API_GATEWAY_TOKEN = '1234567890'

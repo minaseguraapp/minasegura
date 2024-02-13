@@ -1,4 +1,5 @@
 import datetime
+import enum
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +11,7 @@ from django.views import View
 from apps.mine.choices import MeasurementSiteChoice
 from apps.mine.models import Zone
 from apps.mine.repository.api_rest.api_rest_measurement_repository import ApiRestMeasurementRepository
+from apps.mine.repository.api_rest.api_rest_settings_repository import ApiRestSettingsRepository
 
 MEASUREMENT_TYPE = {
     "gas": "METHANE",
@@ -17,31 +19,9 @@ MEASUREMENT_TYPE = {
 }
 
 
-def parse_data_methane(post_data):
-    zone = Zone.objects.get(id=post_data.get("zone"))
-    present_date = datetime.datetime.now()
-    timestamp = datetime.datetime.timestamp(present_date)
-    data = {
-        "timestamp": timestamp,
-        "measurementType": "METHANE",
-        "zone": {
-            "id": zone.id,
-            "type": zone.zone_type.name,
-            "mine": {
-                "id": post_data.get("mine"),
-            }
-        },
-        "measurementInfo": {
-            "measurementSite": post_data.get("measurement_site"),
-            "methaneLevel": post_data.get("methane_level"),
-        }
-    }
-    return data
-
-
-def parse_data_coal_dust(request):
-    data = {}
-    return data
+class MeasurementTypeEnum(enum.Enum):
+    GAS = "gas"
+    COAL = "coal"
 
 
 class Measurement(LoginRequiredMixin, View):
@@ -65,11 +45,11 @@ class Measurement(LoginRequiredMixin, View):
         data = request.POST.copy()
         data["mine"] = mine
         save_result = False
-        if type_name == "gas":
-            measurement_data = parse_data_methane(data)
+        if type_name == MeasurementTypeEnum.GAS.value:
+            measurement_data = self.parse_data_methane(data)
             save_result = self.repository.save(measurement_data)
-        if type_name == "coal":
-            measurement_data = parse_data_coal_dust(data)
+        if type_name == MeasurementTypeEnum.COAL.value:
+            measurement_data = self.parse_data_coal_dust(data)
             save_result = self.repository.save(measurement_data)
 
         if save_result:
@@ -81,6 +61,50 @@ class Measurement(LoginRequiredMixin, View):
     @staticmethod
     def get_template(type_name: str):
         return f"mine/{type_name}/measurement.html"
+
+    @staticmethod
+    def parse_data_methane(post_data):
+        zone = Zone.objects.get(id=post_data.get("zone"))
+        present_date = datetime.datetime.now()
+        timestamp = datetime.datetime.timestamp(present_date)
+        data = {
+            "timestamp": timestamp,
+            "measurementType": "METHANE",
+            "zone": {
+                "id": zone.id,
+                "type": zone.zone_type.name,
+                "mine": {
+                    "id": post_data.get("mine"),
+                }
+            },
+            "measurementInfo": {
+                "measurementSite": post_data.get("measurement_site"),
+                "methaneLevel": post_data.get("methane_level"),
+            }
+        }
+        return data
+
+    @staticmethod
+    def parse_data_coal_dust(post_data):
+        zone = Zone.objects.get(id=post_data.get("zone"))
+        present_date = datetime.datetime.now()
+        timestamp = datetime.datetime.timestamp(present_date)
+        data = {
+            "timestamp": timestamp,
+            "measurementType": "COAL_DUST",
+            "zone": {
+                "id": zone.id,
+                "type": zone.zone_type.name,
+                "mine": {
+                    "id": post_data.get("mine"),
+                }
+            },
+            "measurementInfo": {
+                "dustLevel": post_data.get("dust_level"),
+                "particleSize": post_data.get("particle_size"),
+            }
+        }
+        return data
 
 
 class Alerts(LoginRequiredMixin, View):
@@ -101,20 +125,79 @@ class Alerts(LoginRequiredMixin, View):
 
 
 class Settings(LoginRequiredMixin, View):
+    repository = ApiRestSettingsRepository()
 
-    def get(self, mine: int, request, type_name: str):
+    def get(self, request, mine: int, type_name: str, *args, **kwargs):
         template_name = self.get_template(type_name)
+        settings_list = self.repository.find_by_mine(mine)
+        settings = None
+        if type_name == MeasurementTypeEnum.GAS.value:
+            settings = next(setting for setting in settings_list if setting["measurementType"] == "METHANE")
+        if type_name == MeasurementTypeEnum.COAL.value:
+            settings = next(setting for setting in settings_list if setting["measurementType"] == "COAL_DUST")
+
         return render(
             request,
             template_name,
             {
                 "type_name": type_name,
+                "settings": settings,
             },
         )
+
+    def post(self, request, mine: int, type_name: str, *args, **kwargs):
+        data = request.POST.copy()
+        data["mine"] = mine
+        save_result = False
+        if type_name == MeasurementTypeEnum.GAS.value:
+            measurement_data = self.parse_data_methane(data)
+            save_result = self.repository.save(measurement_data)
+        if type_name == MeasurementTypeEnum.COAL.value:
+            measurement_data = self.parse_data_coal_dust(data)
+            save_result = self.repository.save(measurement_data)
+
+        if save_result:
+            messages.success(request, "Configuración guardada correctamente")
+        else:
+            messages.error(request, "Error al guardar la configuración")
+        return redirect('mine:settings', mine=mine, type_name=type_name)
 
     @staticmethod
     def get_template(type_name: str):
         return f"mine/{type_name}/settings.html"
+
+    @staticmethod
+    def parse_data_methane(post_data):
+        present_date = datetime.datetime.now()
+        timestamp = datetime.datetime.timestamp(present_date)
+        data = {
+            "timestamp": timestamp,
+            "measurementType": "METHANE",
+            "mineId": post_data.get("mine"),
+            "thresholdInfo": {
+                "miningOperationsMaxMethaneLevel": post_data.get("mining_operations_max_methane_level"),
+                "mainAirReturnMaxMethaneLevel": post_data.get("main_air_return_max_methane_level"),
+                "airReturnFromStallsMaxMethaneLevel": post_data.get("air_return_from_stalls_max_methane_level"),
+                "airReturnFromPrepAndDevMaxMethaneLevel": post_data.get(
+                    "air_return_from_prep_and_dev_max_methane_level"),
+            }
+        }
+        return data
+
+    @staticmethod
+    def parse_data_coal_dust(post_data):
+        present_date = datetime.datetime.now()
+        timestamp = datetime.datetime.timestamp(present_date)
+        data = {
+            "timestamp": timestamp,
+            "measurementType": "COAL_DUST",
+            "mineId": post_data.get("mine"),
+            "thresholdInfo": {
+                "maxDustLevel": post_data.get("max_dust_level"),
+                "maxParticleSize": post_data.get("max_particle_size"),
+            }
+        }
+        return data
 
 
 def zone_select(request, mine: int):
