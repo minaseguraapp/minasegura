@@ -1,4 +1,5 @@
 {% extends 'dashboard_base.html' %}
+{% load mine_tags %}
 {% block title %}Dashboard{% endblock %}
 
 {% block extra_content %}
@@ -13,71 +14,78 @@
     </section>
     <div class="content">
         <div class="row px-md-4">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Alertas Recientes</h3>
+
+                        <h3 class="card-title"><i class="fas fa-exclamation-triangle"></i> Alertas Recientes </h3>
                     </div>
                     <div class="card-body p-0">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th style="width: 10px">#</th>
-                                <th>Task</th>
-                                <th>Progress</th>
-                                <th style="width: 40px">Label</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>Update software</td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Clean database</td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar bg-warning" style="width: 70%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-warning">70%</span></td>
-                            </tr>
-                            <tr>
-                                <td>3.</td>
-                                <td>Cron job running</td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar bg-primary" style="width: 30%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-primary">30%</span></td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Fix and squish bugs</td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar bg-success" style="width: 90%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-success">90%</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-sm text-center">
+                                <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo de medición</th>
+                                    <th>Valores de alerta</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for alert in alerts|slice:":5" %}
+                                    <tr>
+                                        <td class="align-middle">{{ alert.alertTimestamp|timestamp_to_time|date:"d/m/Y - f A" }}</td>
+                                        <td class="align-middle">
+                                            {% if alert.measurementType == "METHANE" %}
+                                                Gas Metano
+                                            {% elif alert.measurementType == "COAL_DUST" %}
+                                                Polvo de Carbón
+                                            {% else %}
+                                                {{ alert.measurementType }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-bordered text-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Nombre del humbral</th>
+                                                        <th>Valor esperado</th>
+                                                        <th>Valor encontrado</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for info in alert.alertInfo %}
+                                                        <tr>
+                                                            <td>
+                                                                {% if alert.measurementType == "METHANE" %}
+                                                                    {{ info.thresholdName|measurement_site }}
+                                                                {% else %}
+                                                                    {{ info.thresholdName|measurement_site_coal }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>{{ info.valueExpected }}</td>
+                                                            <td>{{ info.valueFound }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
+                {{ maintenance }}
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Mantenimientos Proximos</h3>
+                        <h3 class="card-title">Mantenimientos Próximos</h3>
                     </div>
                     <div class="card-body p-0">
                         <table class="table table-striped">

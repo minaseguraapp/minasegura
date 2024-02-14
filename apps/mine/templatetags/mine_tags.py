@@ -2,7 +2,7 @@ import datetime
 
 from django import template
 
-from apps.mine.choices import MeasurementSiteChoice
+from apps.mine.choices import MeasurementSiteChoice, MeasurementSiteCoalChoice
 from apps.mine.models import Zone
 
 register = template.Library()
@@ -16,6 +16,12 @@ def convert_timestamp_to_time(timestamp):
 @register.filter('measurement_site')
 def measurement_site(value):
     label = MeasurementSiteChoice(value).label
+    return label if label else value
+
+
+@register.filter('measurement_site_coal')
+def measurement_site_coal(value):
+    label = MeasurementSiteCoalChoice(value).label
     return label if label else value
 
 

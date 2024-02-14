@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
 
+from apps.inventory.models import Maintenance
 from apps.mine.models import Mine
 
 
@@ -14,7 +15,7 @@ from apps.mine.models import Mine
 def login_user(request):
     if request.user.is_superuser:
         return redirect(reverse_lazy("admin:index"))
-    
+
     first_mine = Mine.objects.filter(manager=request.user).first()
     if not first_mine:
         messages.error(request, "¡No tienes minas asignadas!")
@@ -51,8 +52,16 @@ class Dashboard(LoginRequiredMixin, View):
     template_name = "users/dashboard.html"
 
     def get(self, request, mine: int, *args, **kwargs):
+        last_maintenance = self.get_week_maintenance(request, mine)
         return render(
             request,
             self.template_name,
-            {},
+            {
+                "maintenance": last_maintenance,
+            },
         )
+
+    @staticmethod
+    def get_week_maintenance(request, mine: int, *args, **kwargs):
+        maintenance_list = Maintenance.objects.filter(equipment__mine_id=mine, work_end_time__isnull=True)[:5]
+        return maintenance_list

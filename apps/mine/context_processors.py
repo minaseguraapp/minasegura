@@ -1,4 +1,5 @@
 from apps.mine.models import Mine
+from apps.mine.repository.api_rest.api_rest_alert_repository import ApiRestAlertRepository
 
 
 def get_user_mine(request):
@@ -10,4 +11,17 @@ def get_user_mine(request):
             }
     return {
         "user_mine": None
+    }
+
+
+def get_alerts(request):
+    if request.user.is_authenticated and not request.user.is_superuser:
+        alert_repository = ApiRestAlertRepository()
+        alerts = alert_repository.find_by_mine(777)
+        alerts.sort(key=lambda x: x["alertTimestamp"], reverse=True)
+        return {
+            "alerts": alerts
+        }
+    return {
+        "alerts": []
     }

@@ -22,9 +22,9 @@ class MaintenanceForm(ModelForm):
             'priority': forms.Select(attrs={'class': 'form-control'}),
             'work_time': forms.NumberInput(attrs={'class': 'form-control'}),
             'work_started_time': forms.DateTimeInput(
-                attrs={'class': 'form-control', 'type': 'datetime-local', 'required': True}),
+                attrs={'class': 'form-control', 'type': 'datetime-local', }),
             'work_end_time': forms.DateTimeInput(
-                attrs={'class': 'form-control', 'type': 'datetime-local', 'required': True}),
+                attrs={'class': 'form-control', 'type': 'datetime-local', }),
         }
         error_messages = {
             'equipment': {
@@ -39,10 +39,5 @@ class MaintenanceForm(ModelForm):
             'work_time': {
                 'required': 'Este campo es requerido',
             },
-            'work_started_time': {
-                'required': 'Este campo es requerido',
-            },
-            'work_end_time': {
-                'required': 'Este campo es requerido',
-            },
+        
         }

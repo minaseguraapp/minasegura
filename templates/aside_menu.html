@@ -1,3 +1,4 @@
+{% load mine_tags %}
 <style>
     .nav-treeview {
         margin-left: 20px;
@@ -10,6 +11,31 @@
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+                <i class="far fa-bell"></i>
+                <span class="badge badge-warning navbar-badge">{{ alerts|length }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                <span class="dropdown-item dropdown-header">{{ alerts|length }} Alertas</span>
+                <div class="dropdown-divider"></div>
+                {% for alert in alerts %}
+                    <a class="dropdown-item">
+                        {% if alert.measurementType == "METHANE" %}
+                            <i class="fas fa-fire mr-2"></i>
+                            Gas Metano
+                        {% elif alert.measurementType == "COAL_DUST" %}
+                            <i class="fas fa-industry mr-2"></i>
+                            Polvo de Carbón
+                        {% else %}
+                            {{ alert.measurementType }}
+                        {% endif %}
+                        <span class="float-right text-muted text-sm">{{ alert.alertTimestamp|timestamp_to_time|timesince }}</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                {% endfor %}
+            </div>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'users:logout' %}" role="button">
                 <i class="fas fa-sign-out-alt"></i>
