@@ -57,7 +57,7 @@ class Dashboard(LoginRequiredMixin, View):
             request,
             self.template_name,
             {
-                "maintenance": last_maintenance,
+                "maintenance_list": last_maintenance,
             },
         )
 
