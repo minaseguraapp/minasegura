@@ -63,5 +63,5 @@ class Dashboard(LoginRequiredMixin, View):
 
     @staticmethod
     def get_week_maintenance(request, mine: int, *args, **kwargs):
-        maintenance_list = Maintenance.objects.filter(equipment__mine_id=mine, work_end_time__isnull=True)[:5]
+        maintenance_list = Maintenance.objects.filter(equipment__mine_id=mine)[:5]
         return maintenance_list

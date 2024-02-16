@@ -1,13 +1,6 @@
 from django.contrib import admin
 
-from .models import Priority, EquipmentType, Equipment, Maintenance
-
-
-@admin.register(Priority)
-class PriorityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'color', 'is_active')
-    search_fields = ('name', 'description', 'color')
-    list_filter = ('is_active',)
+from .models import EquipmentType, Equipment, Maintenance
 
 
 @admin.register(EquipmentType)
@@ -25,6 +18,6 @@ class EquipmentAdmin(admin.ModelAdmin):
 
 @admin.register(Maintenance)
 class MaintenanceAdmin(admin.ModelAdmin):
-    list_display = ('equipment', 'description', 'priority', 'work_time', 'work_started_time', 'work_end_time')
-    search_fields = ('equipment__name', 'description', 'priority__name')
-    list_filter = ('priority',)
+    list_display = ('equipment', 'description', 'execution_date')
+    search_fields = ('equipment__name', 'description',)
+    list_filter = ('execution_date', 'created_at')

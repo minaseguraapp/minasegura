@@ -11,6 +11,7 @@ from django.views import View
 from apps.mine.choices import MeasurementSiteChoice
 from apps.mine.models import Zone
 from apps.mine.repository.api_rest.api_rest_measurement_repository import ApiRestMeasurementRepository
+from apps.mine.repository.api_rest.api_rest_notification_repository import ApiRestNotificationRepository
 from apps.mine.repository.api_rest.api_rest_settings_repository import ApiRestSettingsRepository
 
 MEASUREMENT_TYPE = {
@@ -126,6 +127,7 @@ class Alerts(LoginRequiredMixin, View):
 
 class Settings(LoginRequiredMixin, View):
     repository = ApiRestSettingsRepository()
+    notification_repository = ApiRestNotificationRepository()
 
     def get(self, request, mine: int, type_name: str, *args, **kwargs):
         template_name = self.get_template(type_name)
@@ -136,12 +138,15 @@ class Settings(LoginRequiredMixin, View):
         if type_name == MeasurementTypeEnum.COAL.value:
             settings = next(setting for setting in settings_list if setting["measurementType"] == "COAL_DUST")
 
+        notification_settings = self.notification_repository.find_by_mine(mine)
+
         return render(
             request,
             template_name,
             {
                 "type_name": type_name,
                 "settings": settings,
+                "notification_settings": notification_settings,
             },
         )
 
@@ -156,10 +161,18 @@ class Settings(LoginRequiredMixin, View):
             measurement_data = self.parse_data_coal_dust(data)
             save_result = self.repository.save(measurement_data)
 
-        if save_result:
-            messages.success(request, "Configuración guardada correctamente")
+        notification_data = self.parse_notification_data(data)
+        save_notification_result = self.notification_repository.save(notification_data)
+
+        if save_notification_result:
+            messages.success(request, "Configuración de notificaciones guardada correctamente")
         else:
-            messages.error(request, "Error al guardar la configuración")
+            messages.error(request, "Error al guardar la configuración de notificaciones")
+
+        if save_result:
+            messages.success(request, "Configuración de alertas guardada correctamente")
+        else:
+            messages.error(request, "Error al guardar la configuración de alertas")
         return redirect('mine:settings', mine=mine, type_name=type_name)
 
     @staticmethod
@@ -195,6 +208,20 @@ class Settings(LoginRequiredMixin, View):
             "thresholdInfo": {
                 "maxDustLevel": post_data.get("max_dust_level"),
                 "maxParticleSize": post_data.get("max_particle_size"),
+            }
+        }
+        return data
+
+    @staticmethod
+    def parse_notification_data(post_data):
+        present_date = datetime.datetime.now()
+        timestamp = datetime.datetime.timestamp(present_date)
+        data = {
+            "mineId": str(post_data.get("mine")),
+            "timestamp": int(timestamp),
+            "notificationInfo": {
+                "email": post_data.get("email"),
+                "cellphone": post_data.get("cellphone"),
             }
         }
         return data

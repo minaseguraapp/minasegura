@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
 
-class ISettingRepository(ABC):
+class INotificationRepository(ABC):
     @abstractmethod
-    def save(self, setting):
+    def save(self, measurement):
         raise NotImplementedError
 
     @abstractmethod

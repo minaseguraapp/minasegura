@@ -20,7 +20,7 @@
 
                         <h3 class="card-title"><i class="fas fa-exclamation-triangle"></i> Alertas Recientes </h3>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-0" style="height: 400px; overflow: auto">
                         <div class="table-responsive">
                             <table class="table table-sm text-center">
                                 <thead>
@@ -31,7 +31,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for alert in alerts|slice:":4" %}
+                                {% for alert in alerts %}
                                     <tr>
                                         <td class="align-middle">{{ alert.alertTimestamp|timestamp_to_time|date:"d/m/Y - f A" }}</td>
                                         <td class="align-middle">
@@ -48,7 +48,7 @@
                                                 <table class="table table-sm table-bordered text-center">
                                                     <thead>
                                                     <tr>
-                                                        <th>Nombre del humbral</th>
+                                                        <th>Nombre del umbral</th>
                                                         <th>Valor esperado</th>
                                                         <th>Valor encontrado</th>
                                                     </tr>
@@ -91,22 +91,19 @@
                             <thead>
                             <tr>
                                 <th>Equipo</th>
-                                <th>Prioridad</th>
-                                <th>Fecha de creación</th>
+                                <th>Fecha de ejecución</th>
+                                <th>Descripción</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for maintenance in maintenance_list %}
                                 <tr>
                                     <td>{{ maintenance.equipment.name }}
-                                        - {{ maintenance.equipment.equipment_type }}</td>
-                                    <td>
-                                        <span class="badge"
-                                              style="background-color: {{ maintenance.priority.color }}; color: #fff;">
-                                            {{ maintenance.priority.name }}
-                                        </span>
+                                        - {{ maintenance.equipment.equipment_type }}
                                     </td>
-                                    <td>{{ maintenance.created_at }}</td>
+                                    <td>{{ maintenance.execution_date }}</td>
+                                    <td>{{ maintenance.description }}</td>
+
                                 </tr>
                             {% endfor %}
                             </tbody>

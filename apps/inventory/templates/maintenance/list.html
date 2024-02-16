@@ -33,23 +33,16 @@
                                 <thead>
                                 <tr>
                                     <th>Equipo</th>
-                                    <th>Prioridad</th>
-                                    <th>Tiempo de trabajo</th>
-                                    <th>Hora de inicio de trabajo</th>
-                                    <th>Hora de fin de trabajo</th>
-                                    <th>Acciones</th>
+                                    <th>Fecha de ejecución</th>
+                                    <th>Descripción</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for maintenance in object_list %}
                                     <tr>
                                         <td>{{ maintenance.equipment.name }}</td>
-                                        <td>
-                                            {{ maintenance.priority.name }}
-                                        </td>
-                                        <td>{{ maintenance.work_time }}</td>
-                                        <td>{{ maintenance.work_started_time }}</td>
-                                        <td>{{ maintenance.work_end_time }}</td>
+                                        <td>{{ maintenance.execution_date }}</td>
+                                        <td>{{ maintenance.description }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

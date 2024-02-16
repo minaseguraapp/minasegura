@@ -1,26 +1,26 @@
 {% extends 'dashboard_base.html' %}
 {% load static %}
-{% block title %}Configuración | {{ type_name|title }}{% endblock %}
+{% block title %}Configuración | Gas Metano{% endblock %}
 
 {% block extra_content %}
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Configuración de alertas - {{ type_name|title }}</h1>
+                    <h1>Configuración de alertas - Gas Metano</h1>
                 </div>
             </div>
         </div>
     </section>
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <div class="card card-primary">
-                        <div class="card-header d-flex justify-content-center">
-                            <h3 class="card-title">Limites de alerta</h3>
-                        </div>
-                        <form class="form-horizontal" action="" method="post">
+            <form class="form-horizontal" action="" method="post">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="card card-primary">
+                            <div class="card-header d-flex justify-content-center">
+                                <h3 class="card-title">Limites de alerta</h3>
+                            </div>
                             {% csrf_token %}
                             <div class="card-body">
                                 <div class="form-group row d-flex">
@@ -86,17 +86,16 @@
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary float-right">Guardar</button>
                             </div>
-                        </form>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <div class="card card-primary">
-                        <div class="card-header d-flex justify-content-center">
-                            <h3 class="card-title">Configuración Notificación</h3>
-                        </div>
-                        <form data-bitwarden-watching="1">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="card card-primary">
+                            <div class="card-header d-flex justify-content-center">
+                                <h3 class="card-title">Configuración Notificación</h3>
+                            </div>
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Correo</label>
@@ -105,6 +104,8 @@
                                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                         </div>
                                         <input type="email" class="form-control" id="exampleInputEmail1"
+                                               name="email"
+                                               value="{{ notification_settings.notificationInfo.email }}"
                                                placeholder="Ingrese el correo">
                                     </div>
                                 </div>
@@ -116,6 +117,8 @@
                                         </div>
                                         <input type="text" class="form-control"
                                                data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;"
+                                               name="cellphone"
+                                               value="{{ notification_settings.notificationInfo.cellphone }}"
                                                data-mask="" inputmode="text">
                                     </div>
 
@@ -125,10 +128,10 @@
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary  float-right">Guardar</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 {% endblock extra_content %}
