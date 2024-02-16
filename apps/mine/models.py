@@ -5,7 +5,8 @@ class Mine(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre')
     code = models.CharField(max_length=20, verbose_name='Código', null=True, blank=True)
     description = models.TextField(verbose_name='Descripción', null=True, blank=True)
-    manager = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, verbose_name='Encargado')
+    manager = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, verbose_name='Encargado',
+                                related_name='mines')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

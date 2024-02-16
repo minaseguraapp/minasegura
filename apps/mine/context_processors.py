@@ -17,7 +17,8 @@ def get_user_mine(request):
 def get_alerts(request):
     if request.user.is_authenticated and not request.user.is_superuser:
         alert_repository = ApiRestAlertRepository()
-        alerts = alert_repository.find_by_mine(777)
+        mine = request.user.mines.all().first()
+        alerts = alert_repository.find_by_mine(mine.id)
         alerts.sort(key=lambda x: x["alertTimestamp"], reverse=True)
         return {
             "alerts": alerts
